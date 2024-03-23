@@ -1,8 +1,8 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Nav } from "reactstrap";
 
-import logo from "logo.svg";
+// import logo from "logo.svg";
 
 function Sidebar(props) {
   const sidebar = React.useRef();
@@ -17,9 +17,9 @@ function Sidebar(props) {
           href="/admin/dashboard"
           className="simple-text logo-mini"
         >
-          <div className="logo-img">
+          {/* <div className="logo-img">
             <img src={logo} alt="react-logo" />
-          </div>
+          </div> */}
         </a>
         <a
           href="/admin/dashboard"

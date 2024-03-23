@@ -1,21 +1,3 @@
-/*!
-
-=========================================================
-* Paper Dashboard React - v1.3.2
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/main/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -30,8 +12,6 @@ import routes from "routes.js";
 var ps;
 
 function Dashboard(props) {
-  const [backgroundColor, setBackgroundColor] = React.useState("black");
-  const [activeColor, setActiveColor] = React.useState("info");
   const mainPanel = React.useRef();
   const location = useLocation();
   React.useEffect(() => {
@@ -55,11 +35,11 @@ function Dashboard(props) {
       <Sidebar
         {...props}
         routes={routes}
-        bgColor={backgroundColor}
-        activeColor={activeColor}
+        bgColor={"black"}
+        activeColor={"info"}
       />
       <div className="main-panel" ref={mainPanel}>
-        <DemoNavbar {...props} />
+        <DemoNavbar {...props} bgColor={"black"} activeColor={"info"} />
         <Routes>
           {routes.map((prop, key) => {
             return (
@@ -72,7 +52,7 @@ function Dashboard(props) {
             );
           })}
         </Routes>
-        <Footer fluid />
+        {/* <Footer/> */}
       </div>
     </div>
   );
