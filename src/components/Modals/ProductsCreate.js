@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ALLPRODUCT_URL, ALLCATEGORY_URL, ALLROOM_URL } from "config";
 
 // reactstrap components
 import {
@@ -6,7 +8,7 @@ import {
   Card,
   CardHeader,
   CardBody,
-//   CardFooter,
+  //   CardFooter,
   CardTitle,
   FormGroup,
   Form,
@@ -18,6 +20,21 @@ import {
 } from "reactstrap";
 
 const ProductsCreate = ({ isOpen, toggle }) => {
+  const [categories, setCategories] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(ALLCATEGORY_URL);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error al obtener los productos", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle} size="xl">
@@ -40,27 +57,44 @@ const ProductsCreate = ({ isOpen, toggle }) => {
                   <CardBody>
                     <Form>
                       <Row>
-                        <Col className="pr-1" md="8">
+                        <Col className="pr-1" md="10">
                           <FormGroup>
                             <label>Descripcion del producto</label>
                             <Input placeholder="Producto" type="text" />
                           </FormGroup>
                         </Col>
-                        <Col className="pl-1" md="4">
+                      </Row>
+                      <Row>
+                        <Input
+                          type="select"
+                          value={categories}
+                          onChange={(e) => setCategories(e.target.value)}
+                        >
+                          <option value="">Seleccione una categoría</option>
+                          {categories.map((categories) => (
+                            <option
+                              key={categories.id}
+                              value={categories.id_categoria}
+                            >
+                              {categories.descripcion}
+                            </option>
+                          ))}
+                        </Input>
+                        <Col className="pr-1" md="5">
                           <FormGroup>
-                            <label>Categoria</label>
+                            <label>Habitacion</label>
                             <Input placeholder="Categoria" type="select" />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col className="pr-1" md="4">
+                        <Col className="pr-1" md="5">
                           <FormGroup>
                             <label>Cantidad</label>
                             <Input placeholder="Cantidad" type="number" />
                           </FormGroup>
                         </Col>
-                        <Col className="" md="4">
+                        <Col className="pr-1" md="5">
                           <FormGroup>
                             <label>Precio Unitario</label>
                             <Input
@@ -69,15 +103,9 @@ const ProductsCreate = ({ isOpen, toggle }) => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col className="pl-1" md="4">
-                          <FormGroup>
-                            <label>ITBIS</label>
-                            <Input placeholder="ITBIS" type="number" />
-                          </FormGroup>
-                        </Col>
                       </Row>
                       <Row>
-                        <Col md="12">
+                        <Col className="pr-1" md="10">
                           <FormGroup>
                             <label>Descripcion general</label>
                             <Input type="textarea" />

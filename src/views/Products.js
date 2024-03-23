@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ALLPRODUCT_URL } from "config";
 
 // reactstrap components
 import {
@@ -15,10 +17,25 @@ import ProductsCreate from "components/Modals/ProductsCreate";
 
 function Products() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [productos, setProductos] = useState([]);
 
   const toggleModal = () => {
     setModalOpen(!modalOpen);
   };
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const response = await axios.get(ALLPRODUCT_URL);
+        setProductos(response.data);
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      }
+    };
+
+    fetchProductos();
+  });
+
   return (
     <>
       <ProductsCreate isOpen={modalOpen} toggle={toggleModal} />
@@ -29,7 +46,11 @@ function Products() {
               <CardHeader className="d-flex">
                 <CardTitle tag="h4">Productos</CardTitle>
                 <div className="update ml-auto">
-                  <Button className="btn-round" color="primary" onClick={toggleModal}>
+                  <Button
+                    className="btn-round"
+                    color="primary"
+                    onClick={toggleModal}
+                  >
                     Crear Producto
                   </Button>
                 </div>
@@ -41,61 +62,23 @@ function Products() {
                     <tr>
                       <th>Descripcion</th>
                       <th>Categoria</th>
+                      <th>Habitacion</th>
                       <th className="text-right">Cantidad</th>
                       <th className="text-right">Precio Unitario</th>
-                      <th className="text-right">ITBIS</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Silla Caoba</td>
-                      <td>Silla / Comedor</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$7,500.00</td>
-                      <td className="text-right">0.2%</td>
-                    </tr>
-                    <tr>
-                      <td>Mesa madera negra</td>
-                      <td>Mesa de noche / Dormitorio</td>
-                      <td className="text-right">13</td>
-                      <td className="text-right">$10,500.00</td>
-                      <td className="text-right">0.2%</td>
-                    </tr>
-                    <tr>
-                      <td>Mueble blanco</td>
-                      <td>Mueble / Sala</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$13,500.00</td>
-                      <td className="text-right">0.17%</td>
-                    </tr>
-                    <tr>
-                      <td>Silla plastica</td>
-                      <td>Silla / Exteriores</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$7,500.00</td>
-                      <td className="text-right">0.2%</td>
-                    </tr>
-                    <tr>
-                      <td>Sarten anti-adherente</td>
-                      <td>Utencilios / Cocina</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$3,400.00</td>
-                      <td className="text-right">0.1%</td>
-                    </tr>
-                    <tr>
-                      <td>Maceta porcelana blanca</td>
-                      <td>Decoraciones / Interiores</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$4,000.00</td>
-                      <td className="text-right">0.2%</td>
-                    </tr>
-                    <tr>
-                      <td>Silla Sedro</td>
-                      <td>Silla / Comedor</td>
-                      <td className="text-right">15</td>
-                      <td className="text-right">$5,500.00</td>
-                      <td className="text-right">0.25%</td>
-                    </tr>
+                    {productos.map((producto) => (
+                      <tr key={producto.id}>
+                        <td>{producto.descripcion}</td>
+                        <td>{producto.categoria.descripcion}</td>
+                        <td>{producto.habitacion.descripcion}</td>
+                        <td className="text-right">{producto.cantidad}</td>
+                        <td className="text-right">
+                          {producto.precio_unitario}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
               </CardBody>
